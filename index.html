@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bearded Vet Studios — Indie Game Developer</title>
+<meta name="description" content="Bearded Vet Studios is an indie game studio built by a military veteran. Creator of Wyvern Wings.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:   #39ff14;
+    --green-dim: #1a7a08;
+    --green-glow: rgba(57,255,20,0.18);
+    --brown:   #2a1608;
+    --dark:    #0d0d0d;
+    --card:    #111;
+    --text:    #e8e0d0;
+    --muted:   #7a7060;
+    --white:   #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── SCANLINE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 40px;
+    background: rgba(13,13,13,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--green-dim);
+  }
+
+  .nav-logo {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: var(--green);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 10px var(--green);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--green); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 40px 80px;
+    text-align: center;
+    position: relative;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 60%, rgba(42,22,8,0.6) 0%, transparent 70%),
+      var(--dark);
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--green-glow) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-logo {
+    width: 180px;
+    height: auto;
+    margin-bottom: 32px;
+    filter: drop-shadow(0 0 20px rgba(57,255,20,0.5));
+    animation: float 4s ease-in-out infinite;
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-10px); }
+  }
+
+  .hero-eyebrow {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: var(--green);
+    letter-spacing: 0.2em;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(18px, 4vw, 32px);
+    color: var(--white);
+    line-height: 1.5;
+    margin-bottom: 20px;
+    text-shadow: 0 0 30px rgba(57,255,20,0.3);
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn {
+    display: inline-block;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    padding: 16px 28px;
+    border-radius: 4px;
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-primary {
+    background: var(--green);
+    color: var(--dark);
+    box-shadow: 0 0 20px rgba(57,255,20,0.4);
+  }
+
+  .btn-primary:hover {
+    background: var(--white);
+    box-shadow: 0 0 30px rgba(57,255,20,0.6);
+    transform: translateY(-2px);
+  }
+
+  .btn-outline {
+    border: 1px solid var(--green-dim);
+    color: var(--green);
+    margin-left: 16px;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--green);
+    box-shadow: 0 0 15px var(--green-glow);
+    transform: translateY(-2px);
+  }
+
+  /* ── SECTION BASE ── */
+  section {
+    padding: 100px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: var(--green);
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(14px, 2.5vw, 22px);
+    color: var(--white);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--green-dim), transparent);
+    margin: 0 auto;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    margin-top: 48px;
+  }
+
+  .about-text p {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+
+  .about-text p strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid #222;
+    border-top: 2px solid var(--green-dim);
+    padding: 24px;
+    border-radius: 4px;
+  }
+
+  .stat-number {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 22px;
+    color: var(--green);
+    display: block;
+    margin-bottom: 8px;
+    text-shadow: 0 0 10px var(--green-glow);
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* ── GAMES ── */
+  .games-section {
+    padding: 100px 40px;
+    background: linear-gradient(180deg, var(--dark) 0%, #0a0a0a 100%);
+  }
+
+  .games-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .game-card {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 60px;
+    align-items: center;
+    background: var(--card);
+    border: 1px solid #1e1e1e;
+    border-left: 3px solid var(--green);
+    border-radius: 4px;
+    padding: 48px;
+    margin-top: 48px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .game-card:hover {
+    border-left-color: var(--green);
+    box-shadow: -4px 0 20px var(--green-glow);
+  }
+
+  .game-tag {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--green);
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+  }
+
+  .game-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(14px, 2vw, 20px);
+    color: var(--white);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .game-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 28px;
+  }
+
+  .game-features {
+    list-style: none;
+    margin-bottom: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .game-features li {
+    font-size: 12px;
+    color: var(--muted);
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .game-features li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+  }
+
+  .store-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .store-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 12px 18px;
+    border: 1px solid var(--green-dim);
+    color: var(--green);
+    text-decoration: none;
+    border-radius: 4px;
+    letter-spacing: 0.06em;
+    transition: all 0.2s;
+  }
+
+  .store-btn:hover {
+    background: var(--green-glow);
+    border-color: var(--green);
+    box-shadow: 0 0 12px var(--green-glow);
+  }
+
+  .game-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .game-logo-placeholder {
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 9/16;
+    background: linear-gradient(135deg, #1a0a00 0%, #0d1a08 100%);
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .game-logo-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(57,255,20,0.08) 0%, transparent 60%);
+  }
+
+  .dragon-icon {
+    font-size: 64px;
+    filter: drop-shadow(0 0 12px rgba(57,255,20,0.4));
+  }
+
+  .game-logo-text {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: var(--green);
+    text-align: center;
+    line-height: 1.8;
+    text-shadow: 0 0 10px var(--green-glow);
+    z-index: 1;
+  }
+
+  /* ── VALUES ── */
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .value-card {
+    background: var(--card);
+    border: 1px solid #1e1e1e;
+    padding: 32px 24px;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .value-card:hover { border-color: var(--green-dim); }
+
+  .value-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--green-dim), transparent);
+  }
+
+  .value-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .value-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: var(--white);
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+
+  .value-text {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid #1a1a1a;
+    padding: 48px 40px;
+    text-align: center;
+  }
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .footer-logo {
+    width: 60px;
+    opacity: 0.7;
+    filter: drop-shadow(0 0 6px rgba(57,255,20,0.3));
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--green); }
+
+  .footer-copy {
+    font-size: 11px;
+    color: #444;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { gap: 16px; }
+    .nav-links a { font-size: 6px; }
+    section { padding: 60px 20px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .game-card { grid-template-columns: 1fr; padding: 32px 24px; }
+    .game-visual { display: none; }
+    .values-grid { grid-template-columns: 1fr; }
+    .btn-outline { margin-left: 0; margin-top: 12px; }
+    .hero-title { font-size: 14px; }
+    footer { padding: 40px 20px; }
+    .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">BVS</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#games">Games</a></li>
+    <li><a href="wyvernwings.html">Wyvern Wings</a></li>
+    <li><a href="privacy.html">Privacy</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <img src="StudioLogo.png" alt="Bearded Vet Studios" class="hero-logo">
+  <p class="hero-eyebrow">Indie Game Studio</p>
+  <h1 class="hero-title">Games Built With<br>Purpose & Grit</h1>
+  <p class="hero-sub">A military veteran–founded indie studio crafting pixel art games with real depth. No ads. No filler. Just games worth playing.</p>
+  <div>
+    <a href="wyvernwings.html" class="btn btn-primary">Our First Game</a>
+    <a href="#about" class="btn btn-outline">Our Story</a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <p class="section-label">// About</p>
+  <h2 class="section-title">Built in the Field,<br>Finished with Pride</h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p><strong>Bearded Vet Studios</strong> was founded by a military veteran who spent spare time doing something most veterans don't talk about — building video games from scratch.</p>
+      <p>The name says it all. The beard is real. The service was real. And the commitment to building games that respect the player's time and intelligence is just as real.</p>
+      <p>No free-to-play tricks. No aggressive monetization. <strong>Just games you buy once and play forever.</strong></p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-card">
+        <span class="stat-number">1</span>
+        <span class="stat-label">Developer. Fully solo.</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">0</span>
+        <span class="stat-label">Ads across all games</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">∞</span>
+        <span class="stat-label">Hours of iteration</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">US</span>
+        <span class="stat-label">Military veteran</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GAMES -->
+<div class="games-section" id="games">
+  <div class="games-inner">
+    <p class="section-label">// Games</p>
+    <h2 class="section-title">What We've Built</h2>
+
+    <div class="game-card">
+      <div class="game-info">
+        <p class="game-tag">// Available Now</p>
+        <h3 class="game-title">Wyvern Wings</h3>
+        <p class="game-desc">Fly your dragon through 12 handcrafted stages, battle epic bosses with phase 2 transformations, and unlock classes, skins, and abilities. Three full game modes. One-time purchase — no ads, no subscriptions.</p>
+        <ul class="game-features">
+          <li>12 unique stages</li>
+          <li>12 boss fights</li>
+          <li>8 dragon classes</li>
+          <li>14 unlockable skins</li>
+          <li>Boss Rush mode</li>
+          <li>Endless mode</li>
+        </ul>
+        <div class="store-buttons">
+          <a href="wyvernwings.html" class="store-btn">▸ Learn More</a>
+          <a href="https://apps.apple.com" class="store-btn">🍎 App Store</a>
+          <a href="https://play.google.com/store/apps/details?id=com.beardedvetstudios.wyvernwings" class="store-btn">▶ Google Play</a>
+        </div>
+      </div>
+      <div class="game-visual">
+        <div class="game-logo-placeholder">
+          <span class="dragon-icon">🐉</span>
+          <span class="game-logo-text">WYVERN<br>WINGS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- VALUES -->
+<section>
+  <p class="section-label">// Philosophy</p>
+  <h2 class="section-title">How We Build</h2>
+  <div class="values-grid">
+    <div class="value-card">
+      <span class="value-icon">🎖️</span>
+      <h3 class="value-title">No Compromises</h3>
+      <p class="value-text">Military service taught us that shortcuts cost lives. In game development, they cost player trust. We don't ship until it's right.</p>
+    </div>
+    <div class="value-card">
+      <span class="value-icon">💰</span>
+      <h3 class="value-title">Pay Once, Own It</h3>
+      <p class="value-text">Every game is a one-time purchase. No ads, no subscriptions, no in-app purchases. Your money buys the whole game.</p>
+    </div>
+    <div class="value-card">
+      <span class="value-icon">🎮</span>
+      <h3 class="value-title">Depth Over Flash</h3>
+      <p class="value-text">Easy to learn, hard to master. We build games with real progression, real challenge, and real satisfaction when you win.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <img src="StudioLogo.png" alt="Bearded Vet Studios" class="footer-logo">
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="wyvernwings.html">Wyvern Wings</a></li>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="mailto:beardedvetstudios@gmail.com">Contact</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 Bearded Vet Studios. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
