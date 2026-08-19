@@ -93,6 +93,7 @@
     color: var(--muted);
     text-decoration: none;
     letter-spacing: 0.08em;
+    white-space: nowrap;
     transition: color 0.2s;
   }
 
@@ -528,7 +529,7 @@
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
     nav { padding: 14px 20px; }
-    .nav-links { gap: 16px; }
+    .nav-links { flex-wrap: wrap; justify-content: flex-end; gap: 10px 14px; }
     .nav-links a { font-size: 6px; }
     section { padding: 60px 20px; }
     .about-grid { grid-template-columns: 1fr; gap: 40px; }
@@ -551,6 +552,7 @@
     <li><a href="#games">Games</a></li>
     <li><a href="/wyvernwings">Wyvern Wings</a></li>
     <li><a href="https://assets.beardedvetstudios.com">Dev Assets</a></li>
+    <li><a href="https://technology.beardedvetstudios.com">Technology</a></li>
     <li><a href="https://privacy.beardedvetstudios.com">Privacy</a></li>
   </ul>
 </nav>
@@ -668,6 +670,7 @@
       <li><a href="/">Home</a></li>
       <li><a href="/wyvernwings">Wyvern Wings</a></li>
       <li><a href="https://assets.beardedvetstudios.com">Dev Assets</a></li>
+      <li><a href="https://technology.beardedvetstudios.com">Technology</a></li>
       <li><a href="https://www.youtube.com/@beardedvetgamer">YouTube</a></li>
       <li><a href="https://privacy.beardedvetstudios.com">Privacy Policy</a></li>
       <li><a href="mailto:beardedvetstudios@gmail.com">Contact</a></li>
